@@ -9,10 +9,15 @@ do
     esac
 done
 
+echo "After parsing cmd options: template=${template}, overwrite_template_dir=${overwrite_template_dir}"
+
+
 if [ -z "${template}" ]; then
     echo "Available templates: flask"
     read -p "Enter template name: " template
 fi
+
+echo "After asking about the template: template=${template}, overwrite_template_dir=${overwrite_template_dir}"
 
 repo_urlname=$(basename -s .git `git config --get remote.origin.url`)
 repo_name=$(basename -s .git `git config --get remote.origin.url` | tr '-' '_' | tr '[:upper:]' '[:lower:]')
@@ -22,6 +27,7 @@ echo "Repo owner: ${repo_owner}"
 echo "Repo urlname: ${repo_urlname}"
 
 if [ -f ".github/workflows/rename_project.yml" ]; then
+    echo "Found .github/workflows/rename_project.yml, about to run .github/rename_project.sh"
     .github/rename_project.sh -a "${repo_owner}" -n "${repo_name}" -u "${repo_urlname}" -d "Awesome ${repo_name} created by ${repo_owner}"
 fi
 
